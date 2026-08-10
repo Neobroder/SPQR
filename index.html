@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORLD 182 | UMBRELLA TACTICAL OS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Oswald:wght@700&display=swap');
+
+        :root {
+            --hazard-red: #ff0000;
+            --terminal-cyan: #00f2ff;
+            --deep-black: #020202;
+            --gold-sexy: #ffcc00;
+            --panel-border: rgba(0, 242, 255, 0.3);
+            --bg-accent: rgba(10, 10, 10, 0.95);
+        }
+
+        body {
+            background-color: var(--deep-black);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 80%),
+                linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 100%, 100% 4px, 4px 100%;
+            color: #fff;
+            font-family: 'Share Tech Mono', monospace;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Header Estilo Terminal */
+        header {
+            border: 2px solid var(--hazard-red);
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            background: rgba(255, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .system-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3.5rem;
+            letter-spacing: 10px;
+            margin: 0;
+            color: #fff;
+            text-shadow: 0 0 15px var(--hazard-red);
+        }
+
+        /* Contenedor Principal en Cuadrícula */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            background: var(--bg-accent);
+            border: 1px solid var(--panel-border);
+            padding: 20px;
+            position: relative;
+        }
+
+        .panel-header {
+            color: var(--terminal-cyan);
+            border-bottom: 1px solid var(--panel-border);
+            margin-bottom: 15px;
+            font-size: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Roster de Operativos */
+        .roster-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .char-card {
+            background: #111;
+            border: 1px solid #333;
+            overflow: hidden;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .char-card:hover {
+            border-color: var(--terminal-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .char-img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            filter: grayscale(30%) sepia(20%) brightness(0.8);
+            border-bottom: 2px solid #222;
+        }
+
+        .char-info {
+            padding: 12px;
+            background: linear-gradient(to top, #000, transparent);
+        }
+
+        .player-tag {
+            display: block;
+            color: var(--hazard-red);
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .unit-id {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        /* Estilo Especial Neobroder */
+        .sexy-player {
+            border: 2px solid var(--gold-sexy) !important;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+        }
+
+        .sexy-player .char-img {
+            filter: contrast(1.1) brightness(1);
+        }
+
+        .sexy-player .player-tag {
+            color: var(--gold-sexy);
+            text-shadow: 0 0 5px var(--gold-sexy);
+        }
+
+        .sexy-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--gold-sexy);
+            color: #000;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        /* Widgets Laterales */
+        .widget-title {
+            color: var(--hazard-red);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            background-color: var(--terminal-cyan);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        @media (max-width: 1200px) {
+            .dashboard { grid-template-columns: 1fr; }
+            .side-panel { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="panel-header"><span>SECURE CONNECTION: ESTABLISHED</span><span>ID: WORLD_182_ROOT</span></div>
+    <h1 class="system-title">WORLD 182 | TACTICAL OS</h1>
+    <p style="color: var(--terminal-cyan); margin: 5px 0;">[ DUO COMMAND: SPQR | ROMA |  ]</p>
+</header>
+
+<div class="dashboard">
+    <div class="panel side-panel">
+        <h2 class="widget-title">WORLD STATUS</h2>
+        <p style="font-size: 0.9rem; line-height: 1.6;">
+            World 182 in unity as a common front, with a global vision. 
+            Lead by the Triumvirate with the support of minor factions.
+        </p>
+        <div style="margin-top: 30px;">
+            <div class="widget-title" style="font-size: 0.9rem;">Global Force Rank</div>
+            <div style="font-size: 1.5rem; color: var(--gold-sexy);">#1 MVP FORCE</div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-header"><span>ELITE OPERATIVES DATABASE</span><span>COUNT: 13</span></div>
+        
+        <div class="roster-grid">
+            <div class="char-card sexy-player">
+                <div class="sexy-badge">S.E.X.Y R5 STATUS</div>
+                <img src="img/CRIS3.png" class="char-img" alt="Neobroder">
+                <div class="char-info">
+                    <span class="player-tag">[SPQR] NEO</span>
+                
+                    <span class="unit-id">UNIT: CHRIS REDFIELD</span>
+                </div>
+            </div>
+           
+            <div class="char-card">
+                <div class="sexy-badge left-status">SPQR R4</div>
+                <img src="img/HUNK.png" class="char-img" alt="Bootcher">
+                <div class="char-info">
+                    <span class="player-tag">[SPQR] Tenebris.</span>
+                    <span class="unit-id">UNIT: HUNK</span>
+                </div>
+            </div>
+            
+            <div class="char-card">
+                <div class="sexy-badge left-status">R4 SPQR</div>
+                <img src="img/SHERRY.png" class="char-img" alt="BobbyKendo">
+                <div class="char-info">
+                    <span class="player-tag">[SPQR] Aya.Brea</span>
+                    <span class="unit-id">UNIT: SHERRY</span>
+                </div>
+            </div>
+
+                      <div class="char-card">
+                <div class="sexy-badge left-status">R4 SPQR</div>
+                <img src="img/barry.png" class="char-img" alt="BobbyKendo">
+                <div class="char-info">
+                    <span class="player-tag">[SPQR] 小麥</span>
+                    <span class="unit-id">UNIT: BARRY</span>
+                </div>
+            </div>
+
+ 
+                      <div class="char-card">
+                <div class="sexy-badge left-status">R4 SPQR</div>
+                <img src="img/SONRISA.png" class="char-img" alt="BobbyKendo">
+                <div class="char-info">
+                    <span class="player-tag">[SPQR] Prògames97</span>
+                    <span class="unit-id">UNIT: R2R</span>
+                </div>
+            </div>
+
+     <div class="char-card">
+                <div class="sexy-badge left-status">R4 SPQR</div>
+                <img src="img/KARL.png" class="char-img" alt="BobbyKendo">
+                <div class="char-info">
+                    <span class="player-tag">[SPQR] ¥Akira¥</span>
+                    <span class="unit-id">UNIT: HEISENBERG</span>
+                </div>
+            </div>
+
+
+
+                     <div class="char-card">
+                <div class="sexy-badge left-status"> SPQR</div>
+                <img src="img/CARLOS1.png" class="char-img" alt="BobbyKendo">
+                <div class="char-info">
+                    <span class="player-tag">[SPQR] MukhawyAllel</span>
+                    <span class="unit-id">UNIT: CARLOS</span>
+                </div>
+            </div>
+
+
+
+            <div class="char-card">
+                <div class="sexy-badge left-status">SPQR</div>
+                <img src="img/EDA2.png" class="char-img" alt="BobbyKendo">
+                <div class="char-info">
+                    <span class="player-tag">[SPQR] Astyria</span>
+                    <span class="unit-id">UNIT: ADA</span>
+                </div>
+            </div>
+<!--
+
+            <div class="char-card">
+                <div class="sexy-badge left-status">SPQR</div>
+                <img src="img/JILL2.png" class="char-img" alt="THEEND">
+                <div class="char-info">
+                    <span class="player-tag">[SPQR] ALODIA</span>
+                    <span class="unit-id">UNIT: JILL</span>
+                </div>
+            </div>
+          
+        
+ 
+            <div class="char-card">
+                <div class="sexy-badge">R5 MAD</div>
+                <img src="img/ALICE.png" class="char-img" alt="AliceLindelll">
+                <div class="char-info">
+                    <span class="player-tag">[MAD] ALICELINDELLL</span>
+                    <span class="unit-id">UNIT: CASSANDRA DIMITRESCU</span>
+                </div>
+            </div>
+
+            <div class="char-card">
+                <img src="img/barry.png" class="char-img" alt="wonky_will">
+                <div class="char-info">
+                    <span class="player-tag">[MAD] WONKY_WILL</span>
+                    <span class="unit-id">UNIT: BARRY BURTON</span>
+                </div>
+            </div>
+
+
+            <div class="char-card">
+                <div class="sexy-badge left-status">HERO OF MAD</div>
+                <img src="img/wesker.png" class="char-img" alt="ErzaWesker">
+                <div class="char-info">
+                    <span class="player-tag">[MAD] ERZAWESKER</span>
+                    <span class="unit-id">UNIT: ALBERT WESKER</span>
+                </div>
+            </div>
+
+              <div class="char-card">
+                <img src="img/KARL.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[MAD] MADHATTERS</span>
+                    <span class="unit-id">UNIT: KARL HEISENBERG</span>
+                </div>
+            </div>
+
+            <div class="char-card">
+                <div class="sexy-badge">R5 TWD</div>
+                <img src="img/luis.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[TWD] INSULIN</span>
+                    <span class="unit-id">UNIT: LUIS SERRA</span>
+                </div>
+            </div>
+
+              <div class="char-card">
+                <img src="img/BILLY.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[TWD] TOKEHINNUP</span>
+                    <span class="unit-id">UNIT: BILLY COEN</span>
+                </div>
+             </div>
+                
+                <div class="char-card">
+                <img src="img/ETAN2.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[MAD] SHINOBI2U</span>
+                    <span class="unit-id">UNIT: ETHAN WINTERS</span>
+                </div>
+            </div>
+
+              <div class="char-card">
+                <img src="img/EDA2.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[MAD] KINGSAUCE_31</span>
+                    <span class="unit-id">UNIT: ADA WONG</span>
+                </div>
+            </div>
+
+               <div class="char-card">
+                <img src="img/DOG3.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[MAD] KHAZID</span>
+                    <span class="unit-id">UNIT: DOBERMANS</span>
+                </div>
+            </div>
+              
+                <div class="char-card">
+                    <div class="sexy-badge left-status">HERO OF MAD</div>
+                <img src="img/HUNK.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[MAD] HADES</span>
+                    <span class="unit-id">UNIT: HUNK</span>
+                </div>
+            </div>
+
+                   <div class="char-card"> 
+                    <div class="sexy-badge left-status">HERO OF MAD</div>
+                 <img src="img/JACKK.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[MAD] GHOST_LO$$</span>
+                    <span class="unit-id">UNIT: JACK KRAUSER</span>
+                 </div>
+                 </div>
+
+                   <div class="char-card"> 
+                    <div class="sexy-badge left-status">HERO OF MAD</div>
+                 <img src="img/ZENO1.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[MAD] KILLERMAN101</span>
+                    <span class="unit-id">UNIT: ZENO </span>
+                 </div>
+                 </div>
+
+                      <div class="char-card"> 
+                    <div class="sexy-badge left-status">HERO OF MAD</div>
+                 <img src="img/KEVIN RYMAN.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[MAD] JHONKIMBLE</span>
+                    <span class="unit-id">UNIT: KEVIN RAYMAN </span>
+                 </div>
+                 </div>
+
+
+                 <div class="char-card">       
+                 <img src="img/MISTER.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[TWD] KERIOS</span>
+                    <span class="unit-id">UNIT: MISTER X </span>
+                 </div>
+                 </div>
+
+                   <div class="char-card">       
+                 <img src="img/ZOMBIE.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[TWD] FANFAN</span>
+                    <span class="unit-id">UNIT: ZOMBIE POLICE </span>
+                 </div>
+                 </div>
+
+
+                
+                 <div class="char-card">       
+                 <img src="img/MUTANTE.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[TWD] KILLERCAMEO</span>
+                    <span class="unit-id">UNIT: REQUIEM </span>
+                 </div>
+                 </div>
+
+
+
+            
+                 <div class="char-card">       
+                 <img src="img/SONRISA.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[TWD] FABURU</span>
+                    <span class="unit-id">UNIT: PORTADA </span>
+                 </div>
+                 </div>
+                
+
+                   <div class="char-card">       
+                 <img src="img/R4.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[TWD] MARCILIO</span>
+                    <span class="unit-id">UNIT: CHAINSAW</span>
+                 </div>
+                 </div>
+
+                    <div class="char-card">       
+                 <img src="img/LYKER.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[TWD] SWEETCHEEKS</span>
+                    <span class="unit-id">UNIT: LICKER</span>
+                 </div>
+                 </div>
+
+
+                 <div class="char-card">       
+                 <img src="img/PORTADAR2.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[TWD] CRIMSON_SD</span>
+                    <span class="unit-id">UNIT: PORTADA R2 </span>
+                 </div>
+                 </div>
+
+
+
+                  <div class="char-card">       
+                 <img src="img/CARLOS1.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[TWD] 3-ECHO</span>
+                    <span class="unit-id">UNIT: CARLOS OLIVEIRA </span>
+                 </div>
+                 </div>
+
+
+
+
+            <div class="char-card">
+                <div class="sexy-badge">R5 DWA</div>
+                <img src="img/jack2.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[DWA] JACK</span>
+                    <span class="unit-id">UNIT: JACK</span>
+                </div>
+            </div>
+
+            <div class="char-card"> 
+                <img src="img/mik.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[LIM] Vickrit</span>
+                    <span class="unit-id">UNIT: MIKHAIL VICTOR</span>
+                </div>
+            </div>
+                 
+
+               <div class="char-card"> 
+                <img src="img/VICTOR GIDEON.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[LIM] ALEISHAR</span>
+                    <span class="unit-id">UNIT: VICTOR GIDEON</span>
+                </div>
+            </div>
+
+               <div class="char-card"> 
+                <img src="img/BITORES MENDEZ.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[LIM] DEUCA</span>
+                    <span class="unit-id">UNIT: BITORES MENDEZ</span>
+                </div>
+            </div>
+
+
+                <div class="char-card"> 
+                <div class="sexy-badge left-status">R5 BLACK</div>
+                <img src="img/patrick1.png" class="char-img" alt="Madhatters">
+                <div class="char-info">
+                    <span class="player-tag">[BLACK] JINO123</span>
+                    <span class="unit-id">UNIT: TYRELL PATRICK</span>
+                </div>
+            </div>
+             
+                 <div class="char-card"> 
+                 <img src="img/CLAIRE4.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[TWD] ELPISPRESLEY</span>
+                    <span class="unit-id">UNIT: CLAIRE REDFIELD</span>
+                 </div>
+                 </div>
+
+                 <div class="char-card"> 
+                 <img src="img/MARVIN.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[DWA] SEVEN.8.NINE</span>
+                    <span class="unit-id">UNIT: MARVIN BRANAGH</span>
+                 </div>
+                 </div>
+
+                  <div class="char-card"> 
+                 <img src="img/BRAD.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[DWA] SWISTIKK</span>
+                    <span class="unit-id">UNIT: BRAD VICKERS</span>
+                 </div>
+                 </div>
+
+                 <div class="char-card"> 
+                 <img src="img/GRACE.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[BLACK] TRAITOR</span>
+                    <span class="unit-id">UNIT: GRACE ASHCROFT</span>
+                 </div>
+                 </div>
+
+                  <div class="char-card"> 
+                 <img src="img/DAVID.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[BLACK] AIRES</span>
+                    <span class="unit-id">UNIT: DAVID KING</span>
+                 </div>
+                 </div>
+
+                   <div class="char-card"> 
+                 <img src="img/niña.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[ZHP] LIGHTNING414</span>
+                    <span class="unit-id">UNIT: Emily</span>
+                 </div>
+                 </div>
+
+                    <div class="char-card"> 
+                 <img src="img/LOBO.png" class="char-img" alt="Madhatters">
+                 <div class="char-info">
+                    <span class="player-tag">[ZHP] THOMSAN</span>
+                    <span class="unit-id">UNIT: VILLAGE</span>
+                 </div>
+                 </div>
+                      -->
+
+        
+        </div>
+    </div>
+
+    <div class="panel side-panel">
+        <h2 class="widget-title">FACTION LOGS</h2>
+        <div style="font-size: 0.8rem; color: #666;">
+            <p><span class="status-dot"></span> [SPQR] Tactical Strike Active</p>
+            <p><span class="status-dot"></span> [ROMA] Defense Protocols</p>
+            <p><span class="status-dot"></span> [natu] Logistics Online</p>
+        </div>
+        <hr border="0" style="border-top: 1px solid #222; margin: 20px 0;">
+        <p style="font-size: 0.7rem; color: var(--hazard-red);">
+            WARNING: BIOLOGICAL THREAT DETECTED IN WORLD 146 SECTOR.
+        </p>
+    </div>
+</div>
+
+<footer style="text-align: center; margin-top: 50px; padding: 20px; color: #444; font-size: 0.8rem; border-top: 1px solid #111;">
+    TERMINAL ACCESS GRANTED TO: NEOBRODER | UMBRELLA CORP INFRASTRUCTURE
+</footer>
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; background: #111; padding: 10px; border: 1px solid #00f2ff;">
+    <small style="color:#00f2ff; display:block; margin-bottom:5px;">SYSTEM OF AUDIO:</small>
+    <audio controls loop>
+        <source src="audio/Him - Join me in death - 1 hour [mWHWCsF4h1s].mp3" type="audio/mpeg">
+        Tu navegador no soporta el audio.
+    </audio>
+</div>
+</body>
+</html>
